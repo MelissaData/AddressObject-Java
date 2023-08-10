@@ -96,7 +96,7 @@ public class MelissaAddressObjectWindowsJava {
 
       // Print user input
       System.out.println("\n============================== INPUTS ==============================\n");
-      System.out.println("               Address Line 1: " + dataContainer.Address);
+      System.out.println("                      Address: " + dataContainer.Address);
       System.out.println("                         City: " + dataContainer.City);
       System.out.println("                        State: " + dataContainer.State);
       System.out.println("                          Zip: " + dataContainer.Zip);
@@ -108,7 +108,7 @@ public class MelissaAddressObjectWindowsJava {
 
       // Print output
       System.out.println("\n============================== OUTPUT ==============================\n");
-      System.out.println("\n\tAdderss Object Information:");
+      System.out.println("\n\tAddress Object Information:");
 
       System.out.println("\t                     MAK: " + addressObject.mdAddressObj.GetMelissaAddressKey());
       System.out.println("\t          Address Line 1: " + addressObject.mdAddressObj.GetAddress());
@@ -116,7 +116,6 @@ public class MelissaAddressObjectWindowsJava {
       System.out.println("\t                    City: " + addressObject.mdAddressObj.GetCity());
       System.out.println("\t                   State: " + addressObject.mdAddressObj.GetState());
       System.out.println("\t                     Zip: " + addressObject.mdAddressObj.GetZip());
-
       System.out.println("\t            Result Codes: " + dataContainer.ResultCodes);
 
       String[] rs = dataContainer.ResultCodes.split(",");

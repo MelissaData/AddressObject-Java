@@ -1,5 +1,3 @@
-
-
 # Compiled class file
 *.class
 
@@ -13,18 +11,17 @@
 *.rar
 *.cpp
 *.h
+*.hash
 
 /MelissaUpdater/
 
 Data/
-com/
 
 mdAddr.dll
 mdAddr.dll.hash
 libmdAddr.so
 libmdAddr.so.hash
-
-#include
-!mdAddr.jar
+mdAddr_JavaCode.zip
+mdAddr_JavaCode.zip.hash
 
 

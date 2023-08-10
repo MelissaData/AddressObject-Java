@@ -14,7 +14,7 @@ param(
 
 ######################### Classes ##########################
 
-class DLLConfig {
+class FileConfig {
   [string] $FileName;
   [string] $ReleaseVersion;
   [string] $OS;
@@ -34,23 +34,38 @@ $CurrentPath = $PSScriptRoot
 Set-Location $CurrentPath
 $ProjectPath = "$CurrentPath\MelissaAddressObjectWindowsJava"
 $DataPath = "$ProjectPath\Data"
-$BuildPath = "$ProjectPath"
 
 If (!(Test-Path $DataPath)) {
   New-Item -Path $ProjectPath -Name 'Data' -ItemType "directory"
 }
-If (!(Test-Path $BuildPath)) {
-  New-Item -Path $ProjectPath -Name 'Build' -ItemType "directory"
-}
 
 $DLLs = @(
-  [DLLConfig]@{
+  [FileConfig]@{
     FileName       = "mdAddr.dll";
     ReleaseVersion = "$RELEASE_VERSION";
     OS             = "WINDOWS";
     Compiler       = "DLL";
     Architecture   = "64BIT";
     Type           = "BINARY";
+  }
+)
+
+$WrapperCom = @(
+  [FileConfig]@{
+    FileName       = "mdAddrJavaWrapper.dll";
+    ReleaseVersion = $RELEASE_VERSION;
+    OS             = "WINDOWS";
+    Compiler       = "JAVA";
+    Architecture   = "64BIT";
+    Type           = "INTERFACE";
+  },
+  [FileConfig]@{
+    FileName       = "mdAddr_JavaCode.zip";
+    ReleaseVersion = $RELEASE_VERSION;
+    OS             = "ANY";
+    Compiler       = "ANY";
+    Architecture   = "ANY";
+    Type           = "DATA";
   }
 )
 
@@ -79,14 +94,14 @@ function DownloadDLLs() {
 
     # Check for quiet mode
     if ($quiet) {
-      .\MelissaUpdater\MelissaUpdater.exe file --filename $DLL.FileName --release_version $DLL.ReleaseVersion --license $LICENSE --os $DLL.OS --compiler $DLL.Compiler --architecture $DLL.Architecture --type $DLL.Type --target_directory $BuildPath > $null
+      .\MelissaUpdater\MelissaUpdater.exe file --filename $DLL.FileName --release_version $DLL.ReleaseVersion --license $LICENSE --os $DLL.OS --compiler $DLL.Compiler --architecture $DLL.Architecture --type $DLL.Type --target_directory $ProjectPath > $null
 	  if ($? -eq $false) {
         Write-Host "`nCannot run Melissa Updater. Please check your license string!"
 		exit
 	  }
 	}
     else {
-      .\MelissaUpdater\MelissaUpdater.exe file --filename $DLL.FileName --release_version $DLL.ReleaseVersion --license $LICENSE --os $DLL.OS --compiler $DLL.Compiler --architecture $DLL.Architecture --type $DLL.Type --target_directory $BuildPath 
+      .\MelissaUpdater\MelissaUpdater.exe file --filename $DLL.FileName --release_version $DLL.ReleaseVersion --license $LICENSE --os $DLL.OS --compiler $DLL.Compiler --architecture $DLL.Architecture --type $DLL.Type --target_directory $ProjectPath 
       if ($? -eq $false) {
         Write-Host "`nCannot run Melissa Updater. Please check your license string!"
 		exit
@@ -98,10 +113,54 @@ function DownloadDLLs() {
   }
 }
 
+function DownloadWrappers() {
+  foreach ($File in $WrapperCom) {
+    # Check for quiet mode
+    if ($quiet) {
+      .\MelissaUpdater\MelissaUpdater.exe file --filename $File.FileName --release_version $File.ReleaseVersion --license $LICENSE --os $File.OS --compiler $File.Compiler --architecture $File.Architecture --type $File.Type --target_directory $ProjectPath > $null
+      if (($?) -eq $False) {
+        Write-Host "`nCannot run Melissa Updater. Please check your license string!"
+        Exit
+      }
+    }
+    else {
+      .\MelissaUpdater\MelissaUpdater.exe file --filename $File.FileName --release_version $File.ReleaseVersion --license $LICENSE --os $File.OS --compiler $File.Compiler --architecture $File.Architecture --type $File.Type --target_directory $ProjectPath 
+      if (($?) -eq $False) {
+        Write-Host "`nCannot run Melissa Updater. Please check your license string!"
+        Exit
+      }
+    }
+      
+    Write-Host "Melissa Updater finished downloading " $File.FileName "!"
+
+    # Check for the zip folder and extract from the zip folder if it was downloaded
+    if ($File.FileName -eq "mdAddr_JavaCode.zip") {
+      if (!(Test-Path ("$ProjectPath\mdAddr_JavaCode.zip"))) {
+        Write-Host "mdAddr_JavaCode.zip not found." 
+        
+        Write-Host "`nAborting program, see above.  Press any button to exit."
+        $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        exit
+      }
+      else {
+        if (!(Test-Path ("$ProjectPath/com"))) {
+        Expand-Archive -Path "$ProjectPath\mdAddr_JavaCode.zip" -DestinationPath $ProjectPath
+        }
+        else {
+          # Remove the com folder before extracting
+          Remove-Item -Path "$ProjectPath/com" -Recurse -Force
+
+          Expand-Archive -Path "$ProjectPath\mdAddr_JavaCode.zip" -DestinationPath $ProjectPath
+        }
+      }
+    }
+  }
+}
+
 function CheckDLLs() {
   Write-Host "`nDouble checking dll(s) were downloaded."
   $FileMissing = $false 
-  if (!(Test-Path ("$BuildPath\mdAddr.dll"))) {
+  if (!(Test-Path ("$ProjectPath\mdAddr.dll"))) {
     Write-Host "mdAddr.dll not found." 
     $FileMissing = $true
   }
@@ -143,6 +202,9 @@ DownloadDataFiles -license $License     # comment out this line if using DQS Rel
 # Download dll(s)
 DownloadDlls - license $License
 
+# Download wrapper and com folder
+DownloadWrappers -license $License
+
 # Check if all dll(s) have been downloaded. Exit script if missing
 $DllsAreDownloaded = CheckDLLs
 
@@ -159,15 +221,16 @@ Write-Host "All file(s) have been downloaded/updated!"
 Write-Host "`n=========================== BUILD PROJECT =========================="
 
 Set-Location $ProjectPath
-javac -cp mdAddr.jar MelissaAddressObjectWindowsJava.java
-jar cvfm MelissaAddressObjectWindowsJava.jar manifest.txt *.class *.dll mdAddr.jar
+
+javac MelissaAddressObjectWindowsJava.java
+jar cvfm MelissaAddressObjectWindowsJava.jar manifest.txt *.class *.dll com\melissadata\*.class
 
 # Run Project
 if ([String]::IsNullOrEmpty($address) -and [String]::IsNullOrEmpty($city) -and [String]::IsNullOrEmpty($state) -and [String]::IsNullOrEmpty($zip)){
-  java -jar .\MelissaAddressObjectWindowsJava.jar --license $License --dataPath $DataPath
+  java -jar MelissaAddressObjectWindowsJava.jar --license $License --dataPath $DataPath
 }
 else {
-  java -jar .\MelissaAddressObjectWindowsJava.jar --license "$License" --dataPath "$DataPath" --address "$address" --city "$city" --state "$state" --zip "$zip"
+  java -jar MelissaAddressObjectWindowsJava.jar --license "$License" --dataPath "$DataPath" --address "$address" --city "$city" --state "$state" --zip "$zip"
 }
 
 Set-Location ..

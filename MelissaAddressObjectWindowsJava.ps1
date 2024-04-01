@@ -25,17 +25,16 @@ class FileConfig {
 
 ######################### Config ###########################
 
-$RELEASE_VERSION = '2024.02'
+$RELEASE_VERSION = '2024.03'
 $ProductName = "DQ_ADDR_DATA"
 
-# Uses the location of the .ps1 file 
-# Modify this if you want to use 
+# Uses the location of the .ps1 file  
 $CurrentPath = $PSScriptRoot
 Set-Location $CurrentPath
 $ProjectPath = "$CurrentPath\MelissaAddressObjectWindowsJava"
-$DataPath = "$ProjectPath\Data"
 
-If (!(Test-Path $DataPath)) {
+$DataPath = "$ProjectPath\Data" # To use your own data file(s), change to your DQS release data file(s) directory
+If (!(Test-Path $DataPath) -and ($DataPath -eq "$ProjectPath\Data")) {
   New-Item -Path $ProjectPath -Name 'Data' -ItemType "directory"
 }
 
@@ -184,7 +183,7 @@ if ([string]::IsNullOrEmpty($license) ) {
 
 # Check for License from Environment Variables 
 if ([string]::IsNullOrEmpty($License) ) {
-  $License = $env:MD_LICENSE # Get-ChildItem -Path Env:\MD_LICENSE   #[System.Environment]::GetEnvironmentVariable('MD_LICENSE')
+  $License = $env:MD_LICENSE 
 }
 
 if ([string]::IsNullOrEmpty($License)) {
@@ -194,10 +193,7 @@ if ([string]::IsNullOrEmpty($License)) {
 
 # Use Melissa Updater to download data file(s) 
 # Download data file(s) 
-DownloadDataFiles -license $License     # comment out this line if using DQS Release
-
-# Set data file(s) path
-#$DataPath = "C:\\Program Files\\Melissa DATA\\DQT\\Data"			# uncomment this line and change to your DQS Release data file(s) directory
+DownloadDataFiles -license $License # Comment out this line if using own DQS release
 
 # Download dll(s)
 DownloadDlls - license $License

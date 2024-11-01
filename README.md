@@ -28,7 +28,7 @@ And return
 
 ## Tested Environments
 - Windows 10 64-bit Java 19, Powershell 5.1
-- Melissa data files for 2024-09
+- Melissa data files for 2024-10
 
 ## Required Files and Programs
 
@@ -96,8 +96,8 @@ The console will then prompt you with the following warning shown in the image b
 
 #### Download this project
 ```
-$ git clone https://github.com/MelissaData/AddressObject-Java
-$ cd AddressObject-Java
+git clone https://github.com/MelissaData/AddressObject-Java
+cd AddressObject-Java
 ```
 
 #### Set up Melissa Updater 
@@ -133,13 +133,13 @@ Parameters:
 When you have modified the script to match your data location, let's run the script. There are two modes:
 - Interactive 
 
-	The script will prompt the user for a address number, then use the provided number to test Address Object.  For example:
-	```
-	$ .\MelissaAddressObjectWindowsJava.ps1
-	```
+    The script will prompt the user for a address number, then use the provided number to test Address Object.  For example:
+    ```
+    .\MelissaAddressObjectWindowsJava.ps1
+    ```
     For quiet mode:
     ```
-    $ .\MelissaAddressObjectWindowsJava.ps1 -quiet
+    .\MelissaAddressObjectWindowsJava.ps1 -quiet
     ```
 - Command Line 
 
@@ -147,20 +147,20 @@ When you have modified the script to match your data location, let's run the scr
     
     With all parameters:
     ```
-    $ .\MelissaAddressObjectWindowsJava.ps1 -address "22382 Avenida Empresa" -city "Rancho Santa Margarita" -state "CA" -zip "92688"
-    $ .\MelissaAddressObjectWindowsJava.ps1 -address "22382 Avenida Empresa" -city "Rancho Santa Margarita" -state "CA" -zip "92688" -license "<your_license_string>"
+    .\MelissaAddressObjectWindowsJava.ps1 -address "22382 Avenida Empresa" -city "Rancho Santa Margarita" -state "CA" -zip "92688"
+    .\MelissaAddressObjectWindowsJava.ps1 -address "22382 Avenida Empresa" -city "Rancho Santa Margarita" -state "CA" -zip "92688" -license "<your_license_string>"
     ```
 
     With any known (optional) parameters:
     ```
-    $ .\MelissaAddressObjectWindowsJava.ps1 -address "22382 Avenida Empresa" -state "CA" 
-    $ .\MelissaAddressObjectWindowsJava.ps1 -address "22382 Avenida Empresa" -state "CA" -license "<your_license_string>"
+    .\MelissaAddressObjectWindowsJava.ps1 -address "22382 Avenida Empresa" -state "CA" 
+    .\MelissaAddressObjectWindowsJava.ps1 -address "22382 Avenida Empresa" -state "CA" -license "<your_license_string>"
     ```
 
     For quiet mode:
     ```
-    $ .\MelissaAddressObjectWindowsJava.ps1 -address "22382 Avenida Empresa" -city "Rancho Santa Margarita" -state "CA" -zip "92688" -quiet
-    $ .\MelissaAddressObjectWindowsJava.ps1 -address "22382 Avenida Empresa" -city "Rancho Santa Margarita" -state "CA" -zip "92688" -license "<your_license_string>" -quiet
+    .\MelissaAddressObjectWindowsJava.ps1 -address "22382 Avenida Empresa" -city "Rancho Santa Margarita" -state "CA" -zip "92688" -quiet
+    .\MelissaAddressObjectWindowsJava.ps1 -address "22382 Avenida Empresa" -city "Rancho Santa Margarita" -state "CA" -zip "92688" -license "<your_license_string>" -quiet
   
 This is the expected output from a successful setup for interactive mode:
 

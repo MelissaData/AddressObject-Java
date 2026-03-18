@@ -46,10 +46,17 @@ This file needs to be added as a Project Dependency.  This wrapper will need to 
 - dph256.dte
 - dph256.hsa
 - dph256.hsc
+- dph256.hsd
 - dph256.hsf
 - dph256.hsn
+- dph256.hsp
+- dph256.hsr
+- dph256.hst
+- dph256.hsu
 - dph256.hsv
 - dph256.hsx
+- dph256.hsy
+- dph256.hsz
 - ews.txt
 - lcd256
 - mdAddr.dat

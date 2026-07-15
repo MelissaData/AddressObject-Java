@@ -28,7 +28,7 @@ And return
 
 ## Tested Environments
 - Windows 11 64-bit Java 19, Powershell 5.1
-- Melissa data files for 2026-06
+- Melissa data files for 2026-07
 
 ## Required Files and Programs
 

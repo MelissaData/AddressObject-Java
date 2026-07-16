@@ -103,8 +103,8 @@ The console will then prompt you with the following warning shown in the image b
 
 #### Download this project
 ```
-git clone https://git.melissadata.com/dtgroup/melissadataobjectexamples/java/melissaaddressobjectwindowsjava.git
-cd melissaaddressobjectwindowsjava
+git clone https://github.com/MelissaData/AddressObject-Java
+cd AddressObject-Java
 ```
 
 #### Set up Melissa Updater 

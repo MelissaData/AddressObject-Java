@@ -79,7 +79,7 @@ class FileConfig {
 ######################### Config ###########################
 
 # Product release the updater pulls files for
-$RELEASE_VERSION = '2026.08'
+$RELEASE_VERSION = '2026.09'
 $ProductName = "DQ_ADDR_DATA"
 
 # Uses the location of the .ps1 file  
